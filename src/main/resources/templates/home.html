@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Blog :: Home</title>
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}" />
+</head>
+<body>
+<div class="container m-4 p-2 bg-light bg-gradient">
+    <h1>Spring Boot Blog Application</h1>
+    <hr />
+    <div sec:authorize="isAuthenticated()">
+        <a th:href="@{/posts/new}">New Post</a>
+    </div>
+    <div class="posts-container">
+        <div class="post container m-1 border border-info-subtle border-2 p-3 rounded" th:each="post : ${posts}">
+            <h2 class="m-1"><a th:href="@{'/posts/insight/' + ${post.id}}" th:text="${post.title}">Title</a></h2>
+            <h5 class="m-1" th:text="'Written by ' + ${post.account.name}"></h5>
+            <h5 class="m-1" th:text="'Published at ' + ${post.createdAt}">Created At</h5>
+            <p class="m-1" th:text="${post.body}">body text</p>
+            <br>
+        </div>
+    </div>
+    <hr />
+    <ul sec:authorize="!isAuthenticated()">
+        <li><a th:href="@{/register}">Register</a></li>
+        <li><a th:href="@{/login}">Login</a></li>
+    </ul>
+    <div sec:authorize="isAuthenticated()">
+        <form th:action="@{/logout}"
+              method="POST">
+            <div>
+                <label>Logged in with <span sec:authentication="name">Username</span></label>
+            </div>
+            <button class="btn btn-danger mt-2" type="submit">Logout</button>
+        </form>
+    </div>
+
+
+</div>
+
+</body>
+</html>
